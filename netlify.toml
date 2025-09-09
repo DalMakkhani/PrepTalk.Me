@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[dev]
+  command = "npm run dev"
+  port = 3000
+
+# Environment variables for production
+[context.production.environment]
+  NEXT_PUBLIC_API_URL = "https://your-backend-url.railway.app"
+
+# Redirects for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {path = "!/api/*"}
+
+# API redirects to external backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://your-backend-url.railway.app/:splat"
+  status = 200
+  force = true
+
+[functions]
+  directory = "netlify/functions"

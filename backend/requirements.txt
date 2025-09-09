@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+pymongo
+faster-whisper
+torch
+transformers
+textblob
+gtts
+pillow
+groq
+python-dotenv
+httpx

@@ -1,0 +1,38 @@
+{
+  "hr": [
+    "Tell me about yourself and your background.",
+    "Why do you want to work for our company?",
+    "Where do you see yourself in 5 years?",
+    "What are your strengths and weaknesses?",
+    "Describe a challenging situation at work and how you handled it.",
+    "Why should we hire you?",
+    "What do you know about our company?",
+    "What is your expected salary?",
+    "How do you handle stress and pressure?",
+    "Do you have any questions for us?"
+  ],
+  "technical": [
+    "Explain your approach to problem-solving in your field.",
+    "Describe a project where you applied your technical skills effectively.",
+    "How do you stay updated with the latest technologies in your field?",
+    "Explain a complex technical concept in simple terms.",
+    "How would you handle a technical disagreement with a team member?",
+    "What programming languages are you proficient in?",
+    "Describe your experience with agile methodologies.",
+    "How do you ensure code quality in your projects?",
+    "Explain the difference between REST and GraphQL.",
+    "How would you optimize a slow-performing application?"
+  ],
+  "behavioral": [
+    "Describe a time when you had to work under pressure to meet a deadline.",
+    "Tell me about a time when you had to adapt to a significant change at work.",
+    "Give an example of how you worked on a team to accomplish a goal.",
+    "Describe a situation where you had to resolve a conflict with a colleague.",
+    "Tell me about a time when you failed and what you learned from it.",
+    "Describe a situation where you demonstrated leadership skills.",
+    "Tell me about a time when you went above and beyond for a project.",
+    "How do you prioritize tasks when you have multiple deadlines?",
+    "Describe a time when you had to make a difficult decision.",
+    "Tell me about a time when you received constructive criticism and how you responded."
+  ]
+}

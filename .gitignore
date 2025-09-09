@@ -1,0 +1,50 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Local Netlify folder
+.netlify
+
+# macOS files
+.DS_Store
+._*
+
+# Backend cache
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+
+# Python virtual environment
+venv/
+env/
+
+# Test files
+test_*.py
+
+# Setup scripts (optional - you might want to keep these)
+setup*.ps1
