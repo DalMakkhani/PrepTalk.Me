@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { getApiBaseUrl } from "@/lib/api";
 
 // Mock data for interview questions
 const QUESTIONS = {
@@ -29,8 +30,8 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const category = searchParams.get("category") || "hr"
 
-  // Validate category
-  if (!["hr", "technical", "behavioral"].includes(category)) {
+  // Forward audio to Python backend
+  const pyRes = await fetch(`${getApiBaseUrl()}/transcribe`, {
     return NextResponse.json({ error: "Invalid category. Must be one of: hr, technical, behavioral" }, { status: 400 })
   }
 

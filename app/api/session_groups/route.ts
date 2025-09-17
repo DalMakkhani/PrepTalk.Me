@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import { getApiBaseUrl } from "@/lib/api";
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -13,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Forward to backend
-    const response = await fetch(`http://localhost:8000/session_groups?user_id=${encodeURIComponent(user_id)}`)
+    const response = await fetch(`${getApiBaseUrl()}/session_groups?user_id=${encodeURIComponent(user_id)}`)
     
     if (!response.ok) {
       const errorData = await response.json()

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { getApiBaseUrl } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -44,7 +45,7 @@ export default function RegisterPage() {
       formData.append('experience', experience)
       formData.append('job_domain', jobDomain)
       
-      const res = await fetch(`http://localhost:8000/register`, {
+  const res = await fetch(`${getApiBaseUrl()}/register`, {
         method: "POST",
         body: formData,
       })

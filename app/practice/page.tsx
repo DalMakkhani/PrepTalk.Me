@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { getApiBaseUrl } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -197,7 +198,7 @@ export default function PracticePage() {
         formData.append("question", response.question)
         formData.append("category", response.category)
 
-        const res = await fetch("http://localhost:8000/analyze_interview", {
+        const res = await fetch(`${getApiBaseUrl()}/analyze_interview`, {
           method: "POST",
           body: formData
         })

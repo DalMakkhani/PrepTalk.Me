@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { getApiBaseUrl } from "@/lib/api"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -17,7 +18,7 @@ export default function LoginPage() {
     setError("")
     
     try {
-      const res = await fetch(`http://localhost:8000/login`, {
+  const res = await fetch(`${getApiBaseUrl()}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

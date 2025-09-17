@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { getApiBaseUrl } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -84,7 +85,7 @@ export default function SignUp() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("http://localhost:8000/register", {
+  const response = await fetch(`${getApiBaseUrl()}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

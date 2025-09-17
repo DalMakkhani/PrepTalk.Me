@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getApiBaseUrl } from "@/lib/api";
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     
     // Forward to backend
-    const response = await fetch('http://localhost:8000/complete_session', {
+    const response = await fetch(`${getApiBaseUrl()}/complete_session`, {
       method: 'POST',
       body: formData,
     })

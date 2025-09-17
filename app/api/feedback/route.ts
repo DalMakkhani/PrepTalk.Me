@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getApiBaseUrl } from "@/lib/api";
 export const runtime = 'nodejs'; 
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     console.log(`Generating feedback for user ${user_id}`);
     
     // Call your real backend AI/analysis service instead of mock
-    const feedbackRes = await fetch("http://localhost:8000/feedback", {
+    const feedbackRes = await fetch(`${getApiBaseUrl()}/feedback`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ conversation, user_id }),
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     const feedback = await feedbackRes.json();
 
     // save the interview session 
-    await fetch("http://localhost:8000/save_interview", {
+  await fetch(`${getApiBaseUrl()}/save_interview`, {
        method: "POST",
        headers: { "Content-Type": "application/x-www-form-urlencoded" },
        body: new URLSearchParams({
@@ -71,20 +72,20 @@ export async function GET(request: NextRequest) {
 
     if (session_group_id) {
       // Fetch session group details
-      const res = await fetch(`http://localhost:8000/session_group/${session_group_id}`);
-      if (!res.ok) {
-        return NextResponse.json({ error: `Failed to fetch session group: ${res.status}` }, { status: res.status });
+      const groupRes = await fetch(`${getApiBaseUrl()}/session_group/${session_group_id}`);
+      if (!groupRes.ok) {
+        return NextResponse.json({ error: `Failed to fetch session group: ${groupRes.status}` }, { status: groupRes.status });
       }
-      const sessionGroup = await res.json();
+      const sessionGroup = await groupRes.json();
       sessions = sessionGroup.sessions || [];
       sessionName = sessionGroup.session_name || "Interview Session";
     } else {
       // Fetch individual session (legacy support)
-      const res = await fetch(`http://localhost:8000/progress?user_id=${user_id}`);
-      if (!res.ok) {
-        return NextResponse.json({ error: `Failed to fetch sessions: ${res.status}` }, { status: res.status });
+      const progressRes = await fetch(`${getApiBaseUrl()}/progress?user_id=${user_id}`);
+      if (!progressRes.ok) {
+        return NextResponse.json({ error: `Failed to fetch sessions: ${progressRes.status}` }, { status: progressRes.status });
       }
-      const allSessions = await res.json();
+      const allSessions = await progressRes.json();
       const session = session_id
         ? allSessions.find((s: any) => s.session_id === session_id)
         : allSessions[0];

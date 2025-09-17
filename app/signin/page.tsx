@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { getApiBaseUrl } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -24,7 +25,7 @@ export default function SignIn() {
     setError("")
 
     try {
-      const response = await fetch("http://localhost:8000/login", {
+  const response = await fetch(`${getApiBaseUrl()}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

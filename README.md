@@ -25,6 +25,33 @@ PrepTalk is a full-stack web application designed to help job seekers in India p
 - NLP for feedback analysis (mock implementation)
 - RESTful API endpoints
 
+
+## Deployment (Vercel/Render)
+
+### Environment Variables
+
+To connect your frontend to the backend, set the following environment variable in Vercel (or locally in a .env file):
+
+```
+NEXT_PUBLIC_API_URL=https://your-backend-url.onrender.com
+```
+
+Replace the value with your actual Render backend URL.
+
+### Vercel Setup
+
+1. Go to your Vercel project dashboard.
+2. Add the environment variable `NEXT_PUBLIC_API_URL` under Project Settings > Environment Variables.
+3. Redeploy your frontend after saving changes.
+
+### Render Setup (Backend)
+
+1. Deploy the FastAPI backend to Render.
+2. Ensure CORS is enabled for your frontend domain.
+3. Set all required backend environment variables (see `.env.example`).
+
+---
+
 ## Project Structure
 
 \`\`\`

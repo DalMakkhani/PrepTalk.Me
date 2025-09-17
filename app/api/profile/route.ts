@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getApiBaseUrl } from "@/lib/api";
 
 export async function GET(request: NextRequest) {
   try {
@@ -6,7 +7,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId') || 'demo-user'
 
     // Call Python backend to get profile
-    const pyRes = await fetch(`http://localhost:8000/profile/${userId}`, {
+    const pyRes = await fetch(`${getApiBaseUrl()}/profile/${userId}`, {
       method: 'GET',
     })
 
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     const profile = await request.json()
 
     // Call Python backend to save profile
-    const pyRes = await fetch('http://localhost:8000/profile', {
+    const pyRes = await fetch(`${getApiBaseUrl()}/profile`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getApiBaseUrl } from "@/lib/api";
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +9,7 @@ export async function GET(
     const session_group_id = params.session_group_id
     
     // Forward to backend
-    const response = await fetch(`http://localhost:8000/session_group/${session_group_id}`)
+    const response = await fetch(`${getApiBaseUrl()}/session_group/${session_group_id}`)
     
     if (!response.ok) {
       const errorData = await response.json()
@@ -35,7 +36,7 @@ export async function PUT(
     const body = await request.json()
     
     // Forward to backend
-    const response = await fetch(`http://localhost:8000/session_group/${session_group_id}/name`, {
+    const response = await fetch(`${getApiBaseUrl()}/session_group/${session_group_id}/name`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

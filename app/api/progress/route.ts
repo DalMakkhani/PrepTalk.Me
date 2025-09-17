@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getApiBaseUrl } from "@/lib/api";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -6,7 +7,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Fetch real progress/analytics from backend
-    const pyRes = await fetch("http://localhost:8000/progress?user_id=" + encodeURIComponent(user_id), {
+    const pyRes = await fetch(`${getApiBaseUrl()}/progress?user_id=` + encodeURIComponent(user_id), {
       method: "GET"
     });
     if (!pyRes.ok) {
