@@ -27,32 +27,31 @@ const QUESTIONS = {
 }
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const category = searchParams.get("category") || "hr"
+  const searchParams = request.nextUrl.searchParams;
+  const category = searchParams.get("category") || "hr";
 
-  // Forward audio to Python backend
-  const pyRes = await fetch(`${getApiBaseUrl()}/transcribe`, {
-    return NextResponse.json({ error: "Invalid category. Must be one of: hr, technical, behavioral" }, { status: 400 })
+  if (!(category in QUESTIONS)) {
+    return NextResponse.json({ error: "Invalid category. Must be one of: hr, technical, behavioral" }, { status: 400 });
   }
 
   // Get random question from the category
-  const questions = QUESTIONS[category as keyof typeof QUESTIONS]
-  const randomIndex = Math.floor(Math.random() * questions.length)
-  const question = questions[randomIndex]
+  const questions = QUESTIONS[category as keyof typeof QUESTIONS];
+  const randomIndex = Math.floor(Math.random() * questions.length);
+  const question = questions[randomIndex];
 
-  return NextResponse.json({ question, category })
+  return NextResponse.json({ question, category });
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData()
-  const audio = formData.get("audio") as File
+  const formData = await request.formData();
+  const audio = formData.get("audio") as File;
 
   // Forward audio to Python backend
-  const pyRes = await fetch("http://localhost:8000/transcribe", {
+  const pyRes = await fetch(`${getApiBaseUrl()}/transcribe`, {
     method: "POST",
     body: formData,
-  })
-  const data = await pyRes.json()
+  });
+  const data = await pyRes.json();
   // Optionally save transcript in session/db here
-  return NextResponse.json({ transcript: data.transcript })
+  return NextResponse.json({ transcript: data.transcript });
 }
