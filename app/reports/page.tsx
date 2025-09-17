@@ -105,7 +105,7 @@ export default function Reports() {
 
   return (
     <LayoutWithSidebar>
-      <div className="space-y-6">
+      <div className="space-y-6 mt-16">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Interview Session Reports</h1>

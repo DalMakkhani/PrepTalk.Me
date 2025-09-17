@@ -132,7 +132,7 @@ export default function Dashboard() {
 
   return (
     <LayoutWithSidebar>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto mt-16">
         <h1 className="text-3xl font-bold mb-6">Progress Dashboard</h1>
       {error && <div className="mb-4 text-red-600">{error}</div>}
       {loading ? (

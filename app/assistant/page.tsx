@@ -104,7 +104,7 @@ export default function AssistantPage() {
 
   return (
     <LayoutWithSidebar>
-      <div className="h-[calc(100vh-8rem)] flex flex-col">
+      <div className="h-[calc(100vh-8rem)] flex flex-col mt-16">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">AI Interview Assistant</h1>
           <p className="text-gray-600">Get personalized interview preparation advice and practice tips</p>

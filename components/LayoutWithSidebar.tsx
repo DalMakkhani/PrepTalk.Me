@@ -22,14 +22,18 @@ export default function LayoutWithSidebar({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <ClientHeader />
+    <div className="flex min-h-screen w-full">
       <SidebarProvider>
-        <div className="flex min-h-screen">
-          <AppSidebar />
-          <main className="flex-1 p-4 md:p-6">
-            <div className="container mx-auto">{children}</div>
-          </main>
+        <ClientHeader />
+        <div className="flex-1 flex flex-col min-h-screen">
+          <div className="h-full w-64 fixed top-16 left-0 z-30">
+            <AppSidebar />
+          </div>
+          <div className="flex-1 flex flex-col min-h-0" style={{marginLeft: '16rem'}}>
+            <main className="flex-1 overflow-y-auto p-4 md:p-6" style={{marginTop: '32px'}}>
+              <div className="container mx-auto">{children}</div>
+            </main>
+          </div>
         </div>
       </SidebarProvider>
     </div>

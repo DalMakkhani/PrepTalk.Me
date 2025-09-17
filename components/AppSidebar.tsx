@@ -1,3 +1,4 @@
+import * as React from "react";
 import Link from "next/link";
 import { Home, Mic, BarChart2, FileText, MessageSquare, User } from "lucide-react";
 
@@ -11,13 +12,24 @@ export default function AppSidebar() {
     { title: "My Profile", icon: User, href: "/profile" },
   ];
 
+  const [userEmail, setUserEmail] = React.useState<string>("");
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const email = localStorage.getItem("preptalk_user") || "";
+      setUserEmail(email);
+      // Listen for login/logout events from other components
+      const onStorage = () => {
+        setUserEmail(localStorage.getItem("preptalk_user") || "");
+      };
+      window.addEventListener("storage", onStorage);
+      return () => window.removeEventListener("storage", onStorage);
+    }
+  }, []);
+
   return (
     <aside className="w-64 bg-white border-r min-h-screen flex flex-col">
-      <div className="p-6 border-b flex items-center gap-2">
-        <Mic className="h-6 w-6 text-blue-700" />
-        <span className="text-xl font-bold text-blue-700">PrepTalk</span>
-      </div>
-      <nav className="flex-1 p-4">
+      {/* Removed PrepTalk logo/header from sidebar */}
+      <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.title}>
@@ -29,9 +41,9 @@ export default function AppSidebar() {
           ))}
         </ul>
       </nav>
-      <div className="p-4 border-t">
-        <div className="text-xs text-gray-500 mb-2">User: demo-user</div>
-        <div className="text-xs text-gray-400">Connected to MongoDB Atlas</div>
+      <div className="p-4 border-t" style={{marginTop: 'auto'}}>
+        <div className="text-xs text-gray-500 mb-2">Signed in as:</div>
+        <div className="text-sm font-semibold text-gray-700 truncate">{userEmail}</div>
       </div>
     </aside>
   );

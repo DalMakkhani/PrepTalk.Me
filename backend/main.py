@@ -1,8 +1,38 @@
+ASSEMBLYAI_API_KEY = "d0f46f6ac32f4caf8a318ae748b15992"
+
+async def transcribe_with_assemblyai(audio_bytes: bytes) -> str:
+    """Send audio to AssemblyAI and return transcript text."""
+    import httpx
+    upload_url = "https://api.assemblyai.com/v2/upload"
+    transcript_url = "https://api.assemblyai.com/v2/transcript"
+    headers = {"authorization": ASSEMBLYAI_API_KEY}
+
+    # 1. Upload audio file
+    async with httpx.AsyncClient() as client:
+        upload_response = await client.post(upload_url, headers=headers, content=audio_bytes)
+        upload_response.raise_for_status()
+        audio_url = upload_response.json()["upload_url"]
+
+        # 2. Request transcription
+        transcript_response = await client.post(transcript_url, headers=headers, json={"audio_url": audio_url})
+        transcript_response.raise_for_status()
+        transcript_id = transcript_response.json()["id"]
+
+        # 3. Poll for completion
+        while True:
+            poll_response = await client.get(f"{transcript_url}/{transcript_id}", headers=headers)
+            poll_response.raise_for_status()
+            status = poll_response.json()["status"]
+            if status == "completed":
+                return poll_response.json()["text"]
+            elif status == "failed":
+                raise Exception("AssemblyAI transcription failed")
+            import asyncio
+            await asyncio.sleep(2)
 from fastapi import FastAPI, UploadFile, File, Form, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import requests, json, uuid, os
-from faster_whisper import WhisperModel
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import datetime
@@ -29,7 +59,6 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 GROQ_MODEL_FAST = "llama-3.1-8b-instant"      # For quick tasks
 GROQ_MODEL_SMART = "llama-3.3-70b-versatile"   # For complex analysis
 GROQ_TIMEOUT = 60  # Increased timeout for larger model
-model = WhisperModel("base", device="cpu")  # Force CPU usage to avoid CUDA issues
 
 # --- MongoDB Setup ---
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
@@ -137,6 +166,8 @@ async def generate_questions(category: str, count: int = 1, job_domain: str = ""
     prompt = f"""Generate exactly {count} diverse interview questions covering {category_desc}. 
 
 IMPORTANT: Each question should be distinctly different and cover different aspects/topics. Avoid repetitive or similar questions.
+
+Only ask questions that can be answered orally. Do not ask for code to be written. If you want to ask a coding round question, ask the candidate to describe their approach or thought process, not to write code.
 
 Return ONLY a JSON array of question strings: ["question1", "question2", ...]
 
@@ -329,7 +360,7 @@ async def login(
 
 # --- AI Prompt Builder ---
 def build_prompt(conversation: str) -> str:
-    return f"""
+        return f"""
 You are an expert AI interview coach. Analyze the following mock interview transcript.
 
 For each question:
@@ -341,13 +372,15 @@ Then, at the end:
 - List strong and weak points
 - Suggest improvements like a human coach would
 
+If the user asks about any company, provide job-related information about that company: a brief overview, current open job roles, and requirements for each role. Focus on interview preparation, job search, and career advice, not general tech news or product launches.
+
 Address the user directly using \"you\" instead of \"the candidate\".
 Return the entire output strictly in valid JSON format with these keys:
-  questions: [ {{id, conceptual_correctness, confidence, details}} ],
-  overall_feedback: string,
-  strong_points: [string],
-  weak_points: [string],
-  suggestions: [string]
+    questions: [ {{id, conceptual_correctness, confidence, details}} ],
+    overall_feedback: string,
+    strong_points: [string],
+    weak_points: [string],
+    suggestions: [string]
 Transcript:
 {conversation}
 """
@@ -356,8 +389,7 @@ Transcript:
 @app.post("/transcribe")
 async def transcribe(audio: UploadFile = File(...)):
     audio_bytes = await audio.read()
-    segments, _ = model.transcribe(audio_bytes)
-    transcript = " ".join([seg.text for seg in segments])
+    transcript = await transcribe_with_assemblyai(audio_bytes)
     return {"transcript": transcript}
 
 # --- Transcription + Feedback Endpoint ---
@@ -375,7 +407,6 @@ async def analyze_interview(
     import tempfile, os
     try:
         logger.info(f"Received analyze_interview request: user_id={user_id}, question={question}, category={category}")
-        # 1. Transcribe with Whisper
         # Save uploaded audio to a temp file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
             contents = await audio.read()
@@ -384,9 +415,7 @@ async def analyze_interview(
             tmp.flush()
             tmp_path = tmp.name
         try:
-            segments, _ = model.transcribe(tmp_path)
-            logger.info(f"Whisper segments: {segments}")
-            transcript = " ".join([seg.text for seg in segments])
+            transcript = await transcribe_with_assemblyai(contents)
         finally:
             os.remove(tmp_path)
         # 2. Analyze with LLM (prompt as in backend_2.py)
@@ -811,5 +840,4 @@ async def update_session_name(session_group_id: str, request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

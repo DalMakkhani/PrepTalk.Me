@@ -32,9 +32,9 @@ export default function ClientHeader() {
   };
 
   return (
-    <header className="bg-blue-700 text-white p-4 flex justify-between items-center w-full">
-      <span className="font-bold text-xl">PrepTalk</span>
-      <div className="flex gap-2">
+    <header className="bg-blue-700 text-white p-4 flex justify-between items-center w-full fixed top-0 left-0 z-50" style={{width: '100vw'}}>
+      <span className="font-bold text-2xl">PrepTalk</span>
+      <div className="flex gap-2 pr-8">
         {user ? (
           <button
             onClick={handleLogout}

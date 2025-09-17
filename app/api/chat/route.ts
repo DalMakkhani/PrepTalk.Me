@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     // If all models fail, return a helpful response
     console.log("All GROQ models failed, returning fallback response")
     return NextResponse.json({
-      response: "I'm PrepTalk AI Assistant! I'm here to help you with interview preparation. While I'm experiencing some connectivity issues right now, I can still provide some general advice:\n\n1. Research the company thoroughly\n2. Practice common interview questions\n3. Prepare STAR method examples\n4. Dress appropriately and arrive early\n5. Ask thoughtful questions about the role\n\nPlease try sending your message again in a moment, or check with the development team about the API configuration."
+      response: "I'm PrepTalk AI Assistant! I'm here to help you with interview preparation. I am facing some connection issues. \nPlease try sending your message again in a moment, or check with the development team about the API configuration."
     })
 
   } catch (error) {
